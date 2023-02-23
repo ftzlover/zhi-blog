@@ -42,4 +42,12 @@ public interface PhotoMapper extends BaseMapperPlus<PhotoMapper, Photo, PhotoVo>
     @Select("select blog_photo.photo_src from blog_photo where album_id = #{albumId}  LIMIT #{pageNum} , #{pageSize}")
     List<String> PhotoUrl(@Param("albumId") Long albumId,@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
+
+    /**
+     * 根据相册id查询照片id集合
+     */
+    @Select("select id from blog_photo bp where bp.album_id = #{id}")
+    List<Long> PhotoIdList(Long id);
+
+
 }

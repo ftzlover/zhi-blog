@@ -2,6 +2,7 @@ package com.zhi.blog.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.zhi.blog.dto.PhotoAlbumDTO;
+import com.zhi.blog.mapper.PhotoMapper;
 import com.zhi.common.core.page.TableDataInfo;
 import com.zhi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -35,6 +36,8 @@ import static com.zhi.common.enums.blog.ArticleStatusEnum.PUBLIC;
 public class AlbumServiceImpl implements IAlbumService {
 
     private final AlbumMapper baseMapper;
+
+    private final PhotoMapper photoMapper;
 
 
     @Override
@@ -125,7 +128,13 @@ public class AlbumServiceImpl implements IAlbumService {
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
+
             //TODO 做一些业务上的校验,判断是否需要校验
+        }
+        // 删除相册当前删除相册内的照片
+        for (Long id : ids){
+            List<Long> photoIdList = photoMapper.PhotoIdList(id);
+            photoMapper.deleteBatchIds(photoIdList);
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
