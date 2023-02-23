@@ -31,7 +31,7 @@ export default {
       photoAlbumName: "",
       photoAlbumCover: "",
       photoList: [],
-      pageNum: 1,
+      pageNum: 0,
       pageSize: 10,
 
     };
