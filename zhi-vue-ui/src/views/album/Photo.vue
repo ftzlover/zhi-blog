@@ -31,8 +31,9 @@ export default {
       photoAlbumName: "",
       photoAlbumCover: "",
       photoList: [],
-      current: 1,
-      size: 10
+      pageNum: 1,
+      pageSize: 10,
+
     };
   },
   methods: {
@@ -44,17 +45,17 @@ export default {
     },
     infiniteHandler($state) {
       this.axios
-        .get("/api/albums/" + this.$route.params.albumId + "/photos", {
+        .get("/api/photo/photo/albums/" + this.$route.params.albumId + "/photos", {
           params: {
-            current: this.current,
-            size: this.size
+              pageNum: this.pageNum,
+              pageSize: this.pageSize
           }
         })
         .then(({ data }) => {
           this.photoAlbumCover = data.data.photoAlbumCover;
           this.photoAlbumName = data.data.photoAlbumName;
           if (data.data.photoList.length) {
-            this.current++;
+            this.pageNum=this.pageNum+this.pageSize;
             this.photoList.push(...data.data.photoList);
             $state.loaded();
           } else {

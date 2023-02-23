@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     listPhotoAlbums() {
-      this.axios.get("/api/photos/albums").then(({ data }) => {
+      this.axios.get("/api/album/album/photos/albums").then(({ data }) => {
         this.photoAlbumList = data.data;
       });
     }

@@ -15,9 +15,6 @@ public class PageUtils {
 
     private static final ThreadLocal<Page<?>> PAGE_HOLDER = new ThreadLocal<>();
 
-
-
-
     public static void setCurrentPage(Page<?> page) {
         PAGE_HOLDER.set(page);
     }

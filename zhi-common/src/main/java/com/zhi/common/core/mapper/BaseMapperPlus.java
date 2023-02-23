@@ -210,6 +210,7 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
     }
 
     default <P extends IPage<V>> P selectVoPage(IPage<T> page, Wrapper<T> wrapper) {
+
         return selectVoPage(page, wrapper, this.currentVoClass());
     }
 

@@ -1,10 +1,7 @@
 import Vue from 'vue'
-
 import Cookies from 'js-cookie'
-
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
-
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/ruoyi.scss' // ruoyi css
 import App from './App'
@@ -47,7 +44,7 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
 import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
 import Prism from 'prismjs';
-// 文本编辑器
+// 富文本编辑器
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 
