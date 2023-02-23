@@ -33,7 +33,7 @@ public interface ArticleMapper extends BaseMapperPlus<ArticleMapper, Article, Ar
 
     @Override
     @DataPermission({
-        @DataColumn(key = "deptName", value = "dept_id"),
+//        @DataColumn(key = "deptName", value = "dept_id"),
         @DataColumn(key = "userName", value = "user_id")
     })
     <P extends IPage<Article>> P selectPage(P page, @Param(Constants.WRAPPER) Wrapper<Article> queryWrapper);
