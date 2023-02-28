@@ -11,17 +11,23 @@ public class CommonConst {
     /**
      * 文章对应的type
      */
-    public static final int ARTICLE_TYPE = 1;
+    public static final String ARTICLE_TYPE = "articleCommentStrategy";
+
+    public static final Integer ARTICLE_TYPE_VALUE = 1;
 
     /**
      * 友链对应的type
      */
-    public static final int FRIENDLINK_TYPE = 2;
+    public static final String FRIENDLINK_TYPE = "friendLinkCommentStrategy";
+
+    public static final Integer FRIENDLINK_TYPE_VALUE = 2;
 
     /**
      * 说说对应的type
      */
-    public static final int TALK_TYPE = 3;
+    public static final String TALK_TYPE = "talkCommentStrategy";
+
+    public static final Integer TALK_TYPE_VALUE = 3;
 
 
 

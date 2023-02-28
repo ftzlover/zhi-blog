@@ -1,8 +1,5 @@
 package com.zhi.blog.service.impl;
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.ListUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhi.blog.blogutils.CategoryOrTag;
 import com.zhi.blog.domain.Category;
@@ -10,10 +7,10 @@ import com.zhi.blog.domain.Tag;
 import com.zhi.blog.domain.vo.PageResult;
 import com.zhi.blog.dto.*;
 import com.zhi.blog.dto.vo.ConditionVO;
-import com.zhi.blog.factory.CommentTypeFactory;
 import com.zhi.blog.mapper.CategoryMapper;
 import com.zhi.blog.mapper.TagMapper;
 import com.zhi.blog.service.ITagService;
+import com.zhi.blog.strategy.context.DeleteStrategyContext;
 import com.zhi.common.core.page.TableDataInfo;
 import com.zhi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -71,6 +68,9 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Resource
     private final ITagService tagService;
+
+    @Resource
+    private DeleteStrategyContext deleteStrategyContext;
 
 
 
@@ -393,7 +393,7 @@ public class ArticleServiceImpl implements IArticleService {
                 baseMapper.delectTagsById(id);
             }
             //删除文章对应删除评论
-            CommentTypeFactory.operate(ARTICLE_TYPE,ids);
+            deleteStrategyContext.operate(ARTICLE_TYPE,ids);
 
         }
         return baseMapper.deleteBatchIds(ids) > 0;

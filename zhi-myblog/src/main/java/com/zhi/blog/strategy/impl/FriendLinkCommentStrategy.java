@@ -12,15 +12,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zhi.common.constant.blog.CommonConst.FRIENDLINK_TYPE;
+import static com.zhi.common.constant.blog.CommonConst.FRIENDLINK_TYPE_VALUE;
 
 /**
  * @author ftz-lover
  * @version 1.0
  * @date 2023/2/27 21:07
  */
-@RequiredArgsConstructor
-@Service
+@Service("friendLinkCommentStrategy")
 public class FriendLinkCommentStrategy implements DeleteType {
 
     @Resource
@@ -33,7 +32,7 @@ public class FriendLinkCommentStrategy implements DeleteType {
     public void operate(Collection<Long> ids) {
 
         ids.forEach( i ->{
-            List<Comment> comments = commentMapper.selectList(new LambdaQueryWrapper<Comment>().eq(Comment::getType, FRIENDLINK_TYPE).eq(Comment::getTopicId,i));
+            List<Comment> comments = commentMapper.selectList(new LambdaQueryWrapper<Comment>().eq(Comment::getType, FRIENDLINK_TYPE_VALUE).eq(Comment::getTopicId,i));
             commentMapper.deleteBatchIds(comments.stream().map(Comment::getId).collect(Collectors.toList()));
         });
 

@@ -2,6 +2,7 @@ package com.zhi.blog.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.zhi.blog.dto.FriendLinkDTO;
+import com.zhi.blog.strategy.context.DeleteStrategyContext;
 import com.zhi.common.core.page.TableDataInfo;
 import com.zhi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,9 +18,13 @@ import com.zhi.blog.domain.FriendLink;
 import com.zhi.blog.mapper.FriendLinkMapper;
 import com.zhi.blog.service.IFriendLinkService;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
+
+import static com.zhi.common.constant.blog.CommonConst.ARTICLE_TYPE;
+import static com.zhi.common.constant.blog.CommonConst.FRIENDLINK_TYPE;
 
 /**
  * 友链管理Service业务层处理
@@ -32,6 +37,9 @@ import java.util.Collection;
 public class FriendLinkServiceImpl implements IFriendLinkService {
 
     private final FriendLinkMapper baseMapper;
+
+    @Resource
+    private DeleteStrategyContext deleteStrategyContext;
 
     /**
      * 查看前台友链
@@ -120,6 +128,9 @@ public class FriendLinkServiceImpl implements IFriendLinkService {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
+        //删除友链对应删除评论
+        deleteStrategyContext.operate(FRIENDLINK_TYPE,ids);
+
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 }

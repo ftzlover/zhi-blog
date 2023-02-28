@@ -6,6 +6,7 @@ import com.zhi.blog.domain.vo.PageResult;
 import com.zhi.blog.dto.CommentCountDTO;
 import com.zhi.blog.dto.TalkDTO;
 import com.zhi.blog.mapper.CommentMapper;
+import com.zhi.blog.strategy.context.DeleteStrategyContext;
 import com.zhi.common.core.page.TableDataInfo;
 import com.zhi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -27,6 +28,8 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.zhi.common.constant.blog.CommonConst.ARTICLE_TYPE;
+import static com.zhi.common.constant.blog.CommonConst.TALK_TYPE;
 import static com.zhi.common.constant.blog.RedisPrefixConst.TALK_LIKE_COUNT;
 
 /**
@@ -47,6 +50,8 @@ public class TalkServiceImpl implements ITalkService {
     @Resource
     private CommentMapper commentMapper;
 
+    @Resource
+    private DeleteStrategyContext deleteStrategyContext;
 
     /**
      * 博客前端首页说说
@@ -220,6 +225,9 @@ public class TalkServiceImpl implements ITalkService {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
+        // 删除说说下自带的评论
+        deleteStrategyContext.operate(TALK_TYPE,ids);
+
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 }

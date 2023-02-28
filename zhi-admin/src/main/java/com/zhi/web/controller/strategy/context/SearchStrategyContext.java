@@ -35,7 +35,6 @@ public class SearchStrategyContext {
      * @return {@link List<ArticleSearchDTO>} 搜索文章
      */
     public List<ArticleSearchDTO> executeSearchStrategy(String keywords) {
-        System.out.println(getStrategy(searchMode));
         return searchStrategyMap.get(getStrategy(searchMode)).searchArticle(keywords);
     }
 
