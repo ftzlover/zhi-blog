@@ -6,10 +6,14 @@ import com.zhi.blog.domain.bo.ArticleBo;
 import com.zhi.blog.mapper.ArticleMapper;
 import com.zhi.blog.mapper.CategoryMapper;
 import com.zhi.blog.mapper.TagMapper;
+import com.zhi.common.utils.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.zhi.common.constant.blog.CommonConst.DEFAULTCATORTAG;
 
 /**
  * @author ftz-lover
@@ -33,6 +37,10 @@ public class CategoryOrTag {
      *  新增分类或者标签
      */
     public void  AddCateOrTag(ArticleBo bo){
+        // 没有传值默认分配
+        if (StringUtils.isEmpty(bo.getCategoryName())){
+            bo.setCategoryName(DEFAULTCATORTAG);
+        }
         // 如果是新增的分类则先新增这个新分类
         String categoryName = bo.getCategoryName();
         if (categoryMapper.selectIdByName(categoryName)==null){
@@ -43,6 +51,10 @@ public class CategoryOrTag {
         articleMapper.delectTagsById(bo.getId());
         //  递归标签 修改文章则走下面逻辑 新增文章单独处理
         if (bo.getId()!=null){
+            //给文章默认标签
+            if (bo.getTagNameList().isEmpty()){
+                bo.setTagNameList(Arrays.asList(DEFAULTCATORTAG));
+            }
             for(String s:bo.getTagNameList()){
                 // 如果是新增的标签则先将标签新增
                 if (articleMapper.queryTagIdByName(s)==null){

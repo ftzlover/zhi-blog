@@ -10,6 +10,7 @@ import com.zhi.blog.domain.Tag;
 import com.zhi.blog.domain.vo.PageResult;
 import com.zhi.blog.dto.*;
 import com.zhi.blog.dto.vo.ConditionVO;
+import com.zhi.blog.factory.CommentTypeFactory;
 import com.zhi.blog.mapper.CategoryMapper;
 import com.zhi.blog.mapper.TagMapper;
 import com.zhi.blog.service.ITagService;
@@ -391,6 +392,9 @@ public class ArticleServiceImpl implements IArticleService {
             for (Long id :ids){
                 baseMapper.delectTagsById(id);
             }
+            //删除文章对应删除评论
+            CommentTypeFactory.operate(ARTICLE_TYPE,ids);
+
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }

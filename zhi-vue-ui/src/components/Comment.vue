@@ -201,7 +201,6 @@
 import Reply from "./Reply";
 import Paging from "./Paging";
 import Emoji from "./Emoji";
-// import EmojiList from "../assets/js/emoji";
 import NewEmojiList from "@/assets/js/newEmoji";
 export default {
   components: {

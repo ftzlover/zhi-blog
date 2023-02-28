@@ -8,6 +8,22 @@ package com.zhi.common.constant.blog;
  * @date 2021/07/27
  */
 public class CommonConst {
+    /**
+     * 文章对应的type
+     */
+    public static final int ARTICLE_TYPE = 1;
+
+    /**
+     * 友链对应的type
+     */
+    public static final int FRIENDLINK_TYPE = 2;
+
+    /**
+     * 说说对应的type
+     */
+    public static final int TALK_TYPE = 3;
+
+
 
     /**
      * 默认文章标签/分类
