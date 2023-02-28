@@ -4,8 +4,6 @@ import com.zhi.blog.strategy.DeleteType;
 import com.zhi.blog.strategy.impl.ArticleCommentStrategy;
 import com.zhi.blog.strategy.impl.FriendLinkCommentStrategy;
 import com.zhi.blog.strategy.impl.TalkCommentStrategy;
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +15,6 @@ import static com.zhi.common.constant.blog.CommonConst.*;
  * @version 1.0
  * @date 2023/2/27 21:47
  */
-@Service
 public class CommentTypeFactory {
 
     private static final Map<Integer, DeleteType> COMMENT_TYPE_MAP =new HashMap<>();

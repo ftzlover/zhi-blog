@@ -41,6 +41,10 @@ public class CategoryOrTag {
         if (StringUtils.isEmpty(bo.getCategoryName())){
             bo.setCategoryName(DEFAULTCATORTAG);
         }
+        //给文章默认标签
+        if (bo.getTagNameList().isEmpty()){
+            bo.setTagNameList(Arrays.asList(DEFAULTCATORTAG));
+        }
         // 如果是新增的分类则先新增这个新分类
         String categoryName = bo.getCategoryName();
         if (categoryMapper.selectIdByName(categoryName)==null){
@@ -51,10 +55,7 @@ public class CategoryOrTag {
         articleMapper.delectTagsById(bo.getId());
         //  递归标签 修改文章则走下面逻辑 新增文章单独处理
         if (bo.getId()!=null){
-            //给文章默认标签
-            if (bo.getTagNameList().isEmpty()){
-                bo.setTagNameList(Arrays.asList(DEFAULTCATORTAG));
-            }
+
             for(String s:bo.getTagNameList()){
                 // 如果是新增的标签则先将标签新增
                 if (articleMapper.queryTagIdByName(s)==null){

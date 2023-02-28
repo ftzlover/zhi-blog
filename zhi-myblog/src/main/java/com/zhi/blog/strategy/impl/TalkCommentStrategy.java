@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.zhi.blog.domain.Comment;
 import com.zhi.blog.mapper.CommentMapper;
 import com.zhi.blog.strategy.DeleteType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import static com.zhi.common.constant.blog.CommonConst.TALK_TYPE;
  * @version 1.0
  * @date 2023/2/27 21:08
  */
+@RequiredArgsConstructor
 @Service
 public class TalkCommentStrategy implements DeleteType {
 
