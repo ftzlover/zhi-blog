@@ -129,7 +129,7 @@ public class FriendLinkServiceImpl implements IFriendLinkService {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         //删除友链对应删除评论
-        deleteStrategyContext.operate(FRIENDLINK_TYPE,ids);
+//        deleteStrategyContext.operate(FRIENDLINK_TYPE,ids);
 
         return baseMapper.deleteBatchIds(ids) > 0;
     }
