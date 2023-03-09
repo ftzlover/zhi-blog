@@ -1,5 +1,4 @@
 package com.zhi.blog.service.impl;
-
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
@@ -11,10 +10,9 @@ import com.zhi.blog.dto.WebsocketMessageDTO;
 import com.zhi.blog.mapper.ChatRecordMapper;
 import com.zhi.common.utils.blog.HTMLUtils;
 import com.zhi.common.utils.blog.IpUtils;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpoint;
@@ -24,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArraySet;
+
 import static com.zhi.common.enums.blog.ChatTypeEnum.*;
 
 /**
@@ -32,16 +31,13 @@ import static com.zhi.common.enums.blog.ChatTypeEnum.*;
  * @author yezhiqiu
  * @date 2021/07/28
  */
-@SaIgnore
-@Data
-@Service
-@ServerEndpoint(value = "/websocket", configurator = WebSocketServiceImpl.ChatConfigurator.class)
+@ServerEndpoint(value = "/websocket")
 public class WebSocketServiceImpl {
 
     /**
      * 用户session
      */
-    private Session session;
+    public Session session;
 
     /**
      * 用户session集合
@@ -81,8 +77,7 @@ public class WebSocketServiceImpl {
      */
     @OnOpen
     public void onOpen(Session session, EndpointConfig endpointConfig) throws IOException {
-        // 加入连接
-        this.session = session;
+
         webSocketSet.add(this);
         // 更新在线人数
         updateOnlineCount();
@@ -194,11 +189,11 @@ public class WebSocketServiceImpl {
     }
 
 
-    @OnError
-    public void onError(Throwable error) {
-        System.out.println("onError......"+error.getMessage());
-
-    }
+//    @OnError
+//    public void onError(Throwable error) {
+//        System.out.println("onError......"+error.getMessage());
+//
+//    }
 
 
 }

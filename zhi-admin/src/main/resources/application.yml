@@ -173,6 +173,13 @@ security:
     - /favicon.ico
     - /*/api-docs
     - /*/api-docs/**
+    - /websocket/**
+  anonymous:
+    # WebSocket
+    - /websocket/**
+
+
+
 
 # MyBatisPlus配置
 # https://baomidou.com/config/

@@ -8,7 +8,7 @@ module.exports = {
                 pathRewrite: {
                     "^/api": ""
                 }
-            }
+            },
         },
 
         disableHostCheck: true

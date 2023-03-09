@@ -12,7 +12,7 @@
         <img
           width="32"
           height="32"
-          src="https://static.talkxj.com/config/logo.png"
+          src="../assets/img/people.png"
         />
         <div style="margin-left:12px">
           <div>聊天室</div>
@@ -146,7 +146,7 @@
       <img
         width="100%"
         height="100%"
-        src="https://static.talkxj.com/config/logo.png"
+        src="../assets/img/chat.png"
       />
     </div>
   </div>
@@ -204,7 +204,7 @@ export default {
     },
     connect() {
       var that = this;
-      this.websocket = new WebSocket(this.blogInfo.websiteConfig.websocketUrl);
+      this.websocket = new WebSocket(this.blogInfo.websiteConfig.websocketUrl+'/'+this.$store.state.nickname);
       // 连接发生错误的回调方法
       this.websocket.onerror = function(event) {
         console.log(event);
@@ -289,10 +289,10 @@ export default {
         );
       });
       var socketMsg = {
-        nickname: this.nickname,
-        avatar: this.avatar,
+        nickname: this.nickname==null?'游客':this.nickname,
+        avatar: this.avatar==null?'https://s1.ax1x.com/2023/03/09/ppndcTJ.png':this.avatar,
         content: this.content,
-        userId: this.userId,
+        userId: this.userId==null?'0':this.userId,
         type: 3,
         ipAddress: this.ipAddress,
         ipSource: this.ipSource
@@ -302,6 +302,10 @@ export default {
       this.websocket.send(JSON.stringify(this.WebsocketMessage));
       this.content = "";
     },
+
+
+
+
     addEmoji(key) {
       this.isEmoji = false;
       this.$refs.chatInput.focus();
@@ -519,12 +523,12 @@ export default {
   z-index: 1200;
 }
 .chat-btn {
-  background: #1f93ff;
+  /*background: #1f93ff;*/
   border-radius: 100px !important;
   position: fixed;
   bottom: 15px;
   right: 5px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16) !important;
+  /*box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16) !important;*/
   cursor: pointer;
   height: 60px !important;
   width: 60px !important;
