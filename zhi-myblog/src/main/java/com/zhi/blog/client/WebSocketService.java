@@ -24,9 +24,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-
 import static com.zhi.common.enums.blog.ChatTypeEnum.*;
 
+/**
+ * @author water-zhi
+ */
 @ServerEndpoint(value = "/websocket/{userName}")
 @Component
 public class WebSocketService {
@@ -45,7 +47,6 @@ public class WebSocketService {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketService.class);
 
-
     /**
      * 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
      */
@@ -61,9 +62,7 @@ public class WebSocketService {
     private Session session;
     /**接收userName*/
 
-
     private String userName="";
-
 
 
     /**
@@ -83,8 +82,6 @@ public class WebSocketService {
             }
         }
     }
-
-
 
     /**
      * 连接建立成功调用的方法
