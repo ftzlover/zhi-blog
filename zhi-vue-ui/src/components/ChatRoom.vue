@@ -387,7 +387,7 @@ export default {
       formData.append("ipAddress", this.ipAddress);
       formData.append("ipSource", this.ipSource);
       var options = {
-        url: "/api/voice",
+        url: "/api/blogInfo/voice",
         data: formData,
         method: "post",
         headers: {

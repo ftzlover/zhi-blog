@@ -6,12 +6,17 @@ import com.zhi.blog.domain.ChatRecord;
 import com.zhi.blog.dto.ChatRecordDTO;
 import com.zhi.blog.dto.RecallMessageDTO;
 import com.zhi.blog.dto.WebsocketMessageDTO;
+import com.zhi.blog.dto.vo.VoiceVO;
 import com.zhi.blog.mapper.ChatRecordMapper;
+import com.zhi.common.utils.BeanCopyUtils;
 import com.zhi.common.utils.blog.HTMLUtils;
+import com.zhi.system.service.ISysOssService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.PathParam;
@@ -32,6 +37,10 @@ import static com.zhi.common.enums.blog.ChatTypeEnum.*;
 @ServerEndpoint(value = "/websocket/{userName}")
 @Component
 public class WebSocketService {
+
+
+    @Resource
+    private ISysOssService sysOssService;
 
 
     @Autowired
@@ -187,7 +196,7 @@ public class WebSocketService {
      */
     private void broadcastMessage(WebsocketMessageDTO messageDTO) throws IOException {
         for (WebSocketService webSocketService : webSocketSet) {
-            synchronized (session) {
+            synchronized (webSocketService.session) {
                 webSocketService.session.getBasicRemote().sendText(JSON.toJSONString(messageDTO));
                 System.out.println("广播的消息为："+messageDTO.getData().toString());
             }
@@ -209,6 +218,34 @@ public class WebSocketService {
         System.out.println("当前在线人数是"+getOnlineCount());
         broadcastMessage(messageDTO);
     }
+
+    /**
+     * 发送语音
+     *
+     * @param voiceVO 语音路径
+     */
+    public void sendVoice(VoiceVO voiceVO) {
+        // 上传语音文件
+        String content = sysOssService.upload(voiceVO.getFile()).getUrl();
+//        String content = uploadStrategyContext.executeUploadStrategy(voiceVO.getFile(), FilePathEnum.VOICE.getPath());
+        voiceVO.setContent(content);
+        // 保存记录
+        ChatRecord chatRecord = BeanCopyUtils.copyObject(voiceVO, ChatRecord.class);
+        chatRecord.setCreateTime(LocalDateTime.now());
+        chatRecordMapper.insert(chatRecord);
+        // 发送消息
+        WebsocketMessageDTO messageDTO = WebsocketMessageDTO.builder()
+            .type(VOICE_MESSAGE.getType())
+            .data(chatRecord)
+            .build();
+        // 广播消息
+        try {
+            broadcastMessage(messageDTO);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 加载历史聊天记录

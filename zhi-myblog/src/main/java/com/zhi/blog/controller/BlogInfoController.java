@@ -1,8 +1,10 @@
 package com.zhi.blog.controller;
 
 import cn.dev33.satoken.annotation.SaIgnore;
+import com.zhi.blog.client.WebSocketService;
 import com.zhi.blog.domain.vo.BlogHomeInfoVo;
 import com.zhi.blog.dto.vo.BlogInfoVO;
+import com.zhi.blog.dto.vo.VoiceVO;
 import com.zhi.blog.service.IBlogInfoService;
 import com.zhi.common.core.controller.BaseController;
 import com.zhi.common.core.domain.R;
@@ -10,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 
 /**
  * @author ftz-lover
@@ -24,6 +25,10 @@ public class BlogInfoController extends BaseController {
 
     @Resource
     private IBlogInfoService blogInfoService;
+
+
+    @Resource
+    private WebSocketService webSocketService;
 
     /**
      * 查看博客信息
@@ -68,6 +73,20 @@ public class BlogInfoController extends BaseController {
     @PutMapping("/admin/about")
     public R<?> updateAbout( @RequestBody BlogInfoVO blogInfoVO) {
         blogInfoService.updateAbout(blogInfoVO);
+        return R.ok();
+    }
+
+    /**
+     * 保存语音信息
+     *
+     * @param voiceVO 语音信息
+     * @return {@link R<String>} 语音地址
+     */
+    @SaIgnore
+    @ApiOperation(value = "上传语音")
+    @PostMapping("/voice")
+    public R<String> sendVoice(VoiceVO voiceVO) {
+        webSocketService.sendVoice(voiceVO);
         return R.ok();
     }
 
