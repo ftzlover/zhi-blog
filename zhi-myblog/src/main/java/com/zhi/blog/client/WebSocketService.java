@@ -10,12 +10,13 @@ import com.zhi.blog.dto.vo.VoiceVO;
 import com.zhi.blog.mapper.ChatRecordMapper;
 import com.zhi.common.utils.BeanCopyUtils;
 import com.zhi.common.utils.blog.HTMLUtils;
+import com.zhi.common.utils.blog.IpUtils;
+import com.zhi.common.utils.ip.AddressUtils;
 import com.zhi.system.service.ISysOssService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.HandshakeRequest;
@@ -34,7 +35,7 @@ import static com.zhi.common.enums.blog.ChatTypeEnum.*;
 /**
  * @author water-zhi
  */
-@ServerEndpoint(value = "/websocket/{userName}")
+@ServerEndpoint(value = "/websocket/{userName}", configurator = WebSocketService.ChatConfigurator.class)
 @Component
 public class WebSocketService {
 
@@ -79,13 +80,14 @@ public class WebSocketService {
      */
     public static class ChatConfigurator extends ServerEndpointConfig.Configurator {
 
-        public static String HEADER_NAME = "X-Real-IP";
+        public static String HEADER_NAME = "Host";
 
         @Override
         public void modifyHandshake(ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
             try {
-                String firstFoundHeader = request.getHeaders().get(HEADER_NAME.toLowerCase()).get(0);
-                sec.getUserProperties().put(HEADER_NAME, firstFoundHeader);
+                String firstFoundHeader = request.getHeaders().get(HEADER_NAME).get(0);
+                String ip = firstFoundHeader.substring(0,firstFoundHeader.indexOf(":"));
+                sec.getUserProperties().put(HEADER_NAME, ip);
             } catch (Exception e) {
                 sec.getUserProperties().put(HEADER_NAME, "未知ip");
             }
@@ -118,7 +120,7 @@ public class WebSocketService {
         }
 
         // 加载历史聊天记录
-        ChatRecordDTO chatRecordDTO = listChartRecords();
+        ChatRecordDTO chatRecordDTO = listChartRecords(endpointConfig);
         // 发送消息
         WebsocketMessageDTO messageDTO = WebsocketMessageDTO.builder()
             .type(HISTORY_RECORD.getType())
@@ -227,7 +229,6 @@ public class WebSocketService {
     public void sendVoice(VoiceVO voiceVO) {
         // 上传语音文件
         String content = sysOssService.upload(voiceVO.getFile()).getUrl();
-//        String content = uploadStrategyContext.executeUploadStrategy(voiceVO.getFile(), FilePathEnum.VOICE.getPath());
         voiceVO.setContent(content);
         // 保存记录
         ChatRecord chatRecord = BeanCopyUtils.copyObject(voiceVO, ChatRecord.class);
@@ -251,13 +252,17 @@ public class WebSocketService {
      * 加载历史聊天记录
      * @return 加载历史聊天记录
      */
-    private ChatRecordDTO listChartRecords() {
+    private ChatRecordDTO listChartRecords(EndpointConfig endpointConfig) {
         // 获取聊天历史记录
         List<ChatRecord> chatRecordList = chatRecordMapper.selectList(new LambdaQueryWrapper<ChatRecord>()
             .ge(ChatRecord::getCreateTime, DateUtil.offsetHour(new Date(), -12)));
+        // 获取当前用户ip
+        String ipAddress = endpointConfig.getUserProperties().get(ChatConfigurator.HEADER_NAME).toString();
         System.out.println("历史记录大小"+chatRecordList.size());
         return ChatRecordDTO.builder()
             .chatRecordList(chatRecordList)
+            .ipAddress(ipAddress)
+            .ipSource(AddressUtils.getRealAddressByIP(ipAddress))
             .build();
     }
 
