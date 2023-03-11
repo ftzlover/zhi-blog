@@ -9,9 +9,11 @@ import com.zhi.blog.dto.WebsocketMessageDTO;
 import com.zhi.blog.dto.vo.VoiceVO;
 import com.zhi.blog.mapper.ChatRecordMapper;
 import com.zhi.common.utils.BeanCopyUtils;
+import com.zhi.common.utils.ServletUtils;
 import com.zhi.common.utils.blog.HTMLUtils;
 import com.zhi.common.utils.blog.IpUtils;
 import com.zhi.common.utils.ip.AddressUtils;
+import com.zhi.common.utils.spring.SpringUtils;
 import com.zhi.system.service.ISysOssService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,14 +82,13 @@ public class WebSocketService {
      */
     public static class ChatConfigurator extends ServerEndpointConfig.Configurator {
 
-        public static String HEADER_NAME = "Host";
+        public static String HEADER_NAME = "X-Real-IP";
 
         @Override
         public void modifyHandshake(ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
             try {
-                String firstFoundHeader = request.getHeaders().get(HEADER_NAME).get(0);
-                String ip = firstFoundHeader.substring(0,firstFoundHeader.indexOf(":"));
-                sec.getUserProperties().put(HEADER_NAME, ip);
+                String clientIP = ServletUtils.getClientIP();
+                sec.getUserProperties().put(HEADER_NAME, clientIP);
             } catch (Exception e) {
                 sec.getUserProperties().put(HEADER_NAME, "未知ip");
             }
